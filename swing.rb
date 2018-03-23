@@ -7,8 +7,6 @@ require 'date'
 
 # Check swing trade opportunities for Binance
 
-# TODO make sure we ignore the current day
-# use the last 30 members of the array
 
 # Get the full kline data for the symbol.
 def get_kline(symbol)
@@ -26,6 +24,10 @@ def get_kline(symbol)
   res = http.request(req)
   JSON.parse(res.body)
 end
+
+# TODO
+# Allow some flexibility in the length of the swing
+# Like check if the value * profit falls within a 2 day period
 
 # Check to see if it's a good opportunity
 def swing_check(data, params={})
