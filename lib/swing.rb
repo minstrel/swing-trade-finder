@@ -7,6 +7,27 @@ require 'date'
 
 # Check swing trade opportunities for Binance
 
+# Helper methods
+module Swing
+  # Get list of trading pairs from Binance
+  # Returns an array of hashes
+  def get_binance_pairs
+    binance_uri = URI('https://api.binance.com/api/v1/exchangeInfo')
+    binance_http = Net::HTTP.new(binance_uri.host, binance_uri.port)
+    binance_http.use_ssl = true
+     
+    binance_req = Net::HTTP::Get.new(binance_uri.path)
+    binance_req.content_type = 'application/json'
+    binance_res = binance_http.request(binance_req)
+    binance_data = JSON.parse(binance_res.body)['symbols']
+
+    binance_data.collect! { |d| {symbol: d['symbol'],
+                                 base_asset: d['baseAsset'],
+                                 quote_asset: d['quoteAsset']} }
+    binance_data
+  end
+end
+
 # A single day's data
 class Candle
   attr_accessor :high, :low, :time
