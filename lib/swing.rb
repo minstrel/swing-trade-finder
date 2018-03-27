@@ -122,9 +122,29 @@ class CandleGroup
         best_values << test_val
       end
     end
-    # Return array of best values
-    best_values
+    # Return a hash containing # of good days and array of best values
+    {good: best_record, best_values: best_values}
   end
 
+  # Get the best swings for 7, 14 and 28 days and return in a nice format
+  def one_month_analysis
+    long = find_best(days: 28)
+    medium = find_best(days: 14)
+    short = find_best(days: 7)
+    puts "Best buy values at 28 days, returned #{long[:good]} good out of 28"
+    long[:best_values].each do |val|
+      puts "Buy at #{'%.8f' % val}, sell at #{'%.8f' % (val * 1.05)}"
+    end
+    puts "------------------------------------"
+    puts "Best buy values at 14 days, returned #{medium[:good]} good out of 14"
+    medium[:best_values].each do |val|
+      puts "Buy at #{'%.8f' % val}, sell at #{'%.8f' % (val * 1.05)}"
+    end
+    puts "------------------------------------"
+    puts "Best buy values at 7 days, returned #{short[:good]} good out of 7"
+    short[:best_values].each do |val|
+      puts "Buy at #{'%.8f' % val}, sell at #{'%.8f' % (val * 1.05)}"
+    end
+  end
 end
 
